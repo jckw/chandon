@@ -30,6 +30,7 @@ class EmailAuth(graphene.Mutation):
     def mutate(self, info, email, password):
         strategy = load_strategy(info.context)
 
+        # Hacky
         def _request_data():
             return {
                 'email': email,
@@ -38,12 +39,11 @@ class EmailAuth(graphene.Mutation):
 
         strategy.request_data = _request_data
 
-        print(strategy.request_data())
-
         backend = load_backend(strategy, 'email', redirect_uri=None)
 
-        # user = backend.strategy.authenticate(backend=backend, email=email, password=password)
         user = None
+
+        # TODO: Work out if this stuff is necessary
         partial = partial_pipeline_data(backend, user)
 
         if partial:
@@ -53,7 +53,6 @@ class EmailAuth(graphene.Mutation):
         else:
             user = backend.complete(user=user)
 
-        # Get a token for that user, (if there is a user?)
         token = get_token(user)
 
         return EmailAuth(user=user, token=token)
