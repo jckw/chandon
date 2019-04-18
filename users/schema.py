@@ -57,6 +57,17 @@ class EmailAuth(graphene.Mutation):
 
         return EmailAuth(user=user, token=token)
 
+class Viewer(ObjectType):
+    me = graphene.Field(UserType)
+
+    def resolve_me(self, info):
+        user = info.context.user
+
+        if not user.is_authenticated:
+            return None
+
+        return user
+
 
 class Query(ObjectType):
     user = graphene.Field(UserType)
@@ -65,3 +76,5 @@ class Query(ObjectType):
 class Mutation(ObjectType):
     email_auth = EmailAuth.Field()
     social_auth = graphql_social_auth.SocialAuthJWT.Field()
+    refresh_token = graphql_jwt.Refresh.Field()
+    verify_token = graphql_jwt.Verify.Field()

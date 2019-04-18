@@ -2,8 +2,12 @@ from users import schema
 import graphene
 
 
-class Query(schema.Query, graphene.ObjectType):
+class Viewer(schema.Viewer, graphene.ObjectType):
     pass
+
+
+class Query(schema.Query, graphene.ObjectType):
+    viewer = graphene.Field(Viewer)
 
 
 class Mutation(schema.Mutation, graphene.ObjectType):
