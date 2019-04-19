@@ -11,6 +11,7 @@ from social_core.actions import do_complete, do_auth
 from social_core.backends.email import EmailAuth
 from social_core.utils import partial_pipeline_data
 from social_django.utils import load_backend, load_strategy
+from . import patch
 
 
 class UserType(DjangoObjectType):
@@ -57,6 +58,7 @@ class EmailAuth(graphene.Mutation):
 
         return EmailAuth(user=user, token=token)
 
+
 class Viewer(ObjectType):
     me = graphene.Field(UserType)
 
@@ -76,5 +78,5 @@ class Query(ObjectType):
 class Mutation(ObjectType):
     email_auth = EmailAuth.Field()
     social_auth = graphql_social_auth.SocialAuthJWT.Field()
-    refresh_token = graphql_jwt.Refresh.Field()
+    refresh_token = patch.Refresh.Field()
     verify_token = graphql_jwt.Verify.Field()
