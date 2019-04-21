@@ -134,11 +134,13 @@ GRAPHENE = {
     ],
 }
 
+# Use a better system in production, ideally sessions since these can be invalidated
+# Alternatively, use a two token system and customise the authentication mutations
+# as djang-graphql-social-auth does not support refresh tokens out of the box.
 GRAPHQL_JWT = {
-    'JWT_VERIFY_EXPIRATION': True,
-    'JWT_EXPIRATION_DELTA': timedelta(minutes=5),
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
+    'JWT_VERIFY_EXPIRATION': False
 }
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
